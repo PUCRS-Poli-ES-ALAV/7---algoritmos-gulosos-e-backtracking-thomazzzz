@@ -2,11 +2,10 @@ import java.util.Arrays;
 
 public class NRainhas {
 
-    public static char[][] combination(int n) {
-        int numberOfQueens = n;
-        char[][] board = new int[n][n];
+    public char[][] combination(int n) {
+        char[][] board = new char[n][n];
         if (n < 2) {
-            throw new IllegalArgumenException("n deve ser maior ou igual a 2!");
+            throw new IllegalArgumentException("n must be greater thant or equal to 2!");
         }
         for (char[] line : board) {
             Arrays.fill(line, '-');
@@ -17,11 +16,31 @@ public class NRainhas {
             return null;
     }
 
-    public static boolean backtracking(char[][] board, int line) {
-
+    public boolean backtracking(char[][] board, int line) {
+        if (line == board.length)
+            return true;
+        for (int column = 0; column < board.length; column++) {
+            if (canPut(board, line, column)) {
+                board[line][column] = 'Q';
+                if (backtracking(board, line + 1))
+                    return true;
+                board[line][column] = '-';
+            }
+        }
+        return false;
     }
 
-    public static void main(String[] args) throws Exception {
-
+    public boolean canPut(char[][] board, int line, int column) {
+        for (int i = 0; i < line; i++)
+            if (board[i][column] == 'Q')
+                return false;
+        for (int i = line - 1, j = column - 1; i >= 0 && j >= 0; i--, j--)
+            if (board[i][j] == 'Q')
+                return false;
+        for (int i = line - 1, j = column + 1; i >= 0 && j < board.length; i--, j++)
+            if (board[i][j] == 'Q')
+                return false;
+        return true;
     }
+
 }
